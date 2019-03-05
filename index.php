@@ -31,8 +31,9 @@ require_once "scripts/autorization.php";
         <label for="customers">Количество покупателей</label>
         <input class="form__input" type="number" id="customers" name="customers">
     </p>
-    <input type="submit">
+    <input type="submit" value="Создать" class="form__submit">
 </form>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="js/main.js"></script>
 </body>
 </html>
