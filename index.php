@@ -25,7 +25,7 @@ require_once "scripts/autorization.php";
     </p>
     <p class="form__item">
         <label for="deals">Количество сделок</label>
-        <input class="form__input" type="number" id="deals" name="deals">
+        <input class="form__input" type="number" id="deals" name="leads">
     </p>
     <p class="form__item">
         <label for="customers">Количество покупателей</label>

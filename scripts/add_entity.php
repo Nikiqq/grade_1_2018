@@ -3,16 +3,22 @@
 require_once 'app_config.php';
 require_once 'autorization.php';
 
-function add_entity($ent) {
+function add_entity($ent, $number) {
     $data = array (
         'add' =>
             array (
-                0 =>
-                    array (
-                        'name' => 'new_lead',
-                    ),
-            ),
+
+            )
     );
+
+    for($i = 0; $i < $number; $i++) {
+        if($ent !== "customers") {
+            $data["add"][] = array('name' => "{$ent}-{$i}", );
+        }
+        else {
+            $data["add"][] = array('name' => "{$ent}-{$i}", 'next_date' => '1551870660');
+        }
+    }
 
     $link = "https://nkirillov.amocrm.ru/api/v2/$ent";
 
@@ -36,16 +42,15 @@ function add_entity($ent) {
     curl_close($curl); #Завершаем сеанс cURL
     echo "<br>";
     $result = json_decode($out,TRUE);
-    echo "<br>";
-    var_dump($result);
 }
 
 //add_entity("leads");
+if(isset($_POST)) {
+    foreach($_POST as $key => $val) {
+        if($val) {
+            add_entity($key, $val);
+        }
+    }
+}
 
-//if(isset($_POST["contacts"]) && !empty($_POST["contacts"])) {
-//    echo "Все окей";
-//}
-//else {
-//    echo "Блять, кривой!";
-//}
 
