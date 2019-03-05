@@ -50,7 +50,3 @@ die('Ошибка: '.$E->getMessage().PHP_EOL.'Код ошибки: '.$E->getCod
 */
 $Response=json_decode($out,true);
 $Response=$Response['response'];
-if(isset($Response['auth'])) #Флаг авторизации доступен в свойстве "auth"
-//    echo "Авторизация прошла успешно";
-return 'Авторизация прошла успешно';
-return 'Авторизация не удалась';
