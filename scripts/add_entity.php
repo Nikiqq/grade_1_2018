@@ -25,6 +25,42 @@ function add_entity($ent, $number, $ent_array_id, $number_pack = 0) {
 
     $link = "https://nkirillov.amocrm.ru/api/v2/$ent";
 
+    $out = add_update($data, $link);
+    $result = json_decode($out,TRUE);
+
+    $ent_array_id[$ent] = $result["_embedded"]["items"][0]["id"];
+}
+
+function connect_entity($ent, $ent_array_id) {
+
+    $data = array (
+        'update' =>
+            array (
+                0 =>
+                    array (
+                        'id' => $ent_array_id[$ent],
+                        'updated_at' => time()
+                    ),
+            ),
+    );
+
+    if($ent === "contacts") {
+        $data["update"][0]["company_id"] =  $ent_array_id["companies"];
+    }
+    if($ent === "companies") {
+        $data["update"][0]["contacts_id"][] =  $ent_array_id["contacts"];
+    }
+    $data["update"][0]["customers_id"][] =  $ent_array_id["customers"];
+    $data["update"][0]["leads_id"][] =  $ent_array_id["leads"];
+
+    $link = "https://nkirillov.amocrm.ru/api/v2/$ent";
+
+    $out = add_update($data, $link);
+    $result = json_decode($out,TRUE);
+}
+
+function add_update ($data, $link) {
+
     $headers[] = "Content-Type: application/json";
 
     //Curl options
@@ -43,33 +79,7 @@ function add_entity($ent, $number, $ent_array_id, $number_pack = 0) {
     $out=curl_exec($curl); #Инициируем запрос к API и сохраняем ответ в переменную
     $code=curl_getinfo($curl,CURLINFO_HTTP_CODE); #Получим HTTP-код ответа сервера
     curl_close($curl); #Завершаем сеанс cURL
-
-    $result = json_decode($out,TRUE);
-
-    $ent_array_id["$ent"] = $result["_embedded"]["items"][0]["id"];
-}
-
-function connect_entity($ent) {
-    global $ent_array_id;
-    $data = array (
-        'update' =>
-            array (
-                0 =>
-                    array (
-                        'id' => $ent_array_id["$ent"],
-                        'updated_at' => time()
-                    ),
-            ),
-    );
-
-    if($ent === "contacts") {
-        $data["update"][0]["company_id"] = $ent_array_id["companies"];
-    }
-    if($ent === "companies") {
-        $data["update"][0]["contacts_id"][] = $ent_array_id["contacts"];
-    }
-    $data["update"][0]["customers_id"][] = $ent_array_id["customers"];
-    $data["update"][0]["leads_id"][] = $ent_array_id["leads"];
+    return $out;
 }
 
 if(isset($_POST["numbers"])) {
@@ -92,13 +102,20 @@ if(isset($_POST["numbers"])) {
             foreach($entities as $val) {
                 add_entity($val, $max_count, $ent_array_id, $i);
             }
+
+            //связываем контакты со всеми и компании со всеми
+            connect_entity("contacts", $ent_array_id);
+            connect_entity("companies", $ent_array_id);
         }
         if($pack_mod_count > 0) {
             foreach($entities as $val) {
                 add_entity($val, $pack_mod_count, $ent_array_id);
             }
-        }
 
-        print_r($ent_array_id);
+            //связываем контакты со всеми и компании со всеми
+            connect_entity("contacts", $ent_array_id);
+            connect_entity("companies", $ent_array_id);
+        }
+        echo "Работает!";
     }
 }
