@@ -3,8 +3,9 @@
 require_once 'app_config.php';
 require_once 'autorization.php';
 
-function add_entity($ent, $number, $number_pack = 0) {
+function add_entity($ent, $number, $ent_array_id, $number_pack = 0) {
 
+    global $ent_array_id;
     $data = array (
         'add' =>
             array (
@@ -42,8 +43,33 @@ function add_entity($ent, $number, $number_pack = 0) {
     $out=curl_exec($curl); #Инициируем запрос к API и сохраняем ответ в переменную
     $code=curl_getinfo($curl,CURLINFO_HTTP_CODE); #Получим HTTP-код ответа сервера
     curl_close($curl); #Завершаем сеанс cURL
-    echo "<br>";
+
     $result = json_decode($out,TRUE);
+
+    $ent_array_id["$ent"] = $result["_embedded"]["items"][0]["id"];
+}
+
+function connect_entity($ent) {
+    global $ent_array_id;
+    $data = array (
+        'update' =>
+            array (
+                0 =>
+                    array (
+                        'id' => $ent_array_id["$ent"],
+                        'updated_at' => time()
+                    ),
+            ),
+    );
+
+    if($ent === "contacts") {
+        $data["update"][0]["company_id"] = $ent_array_id["companies"];
+    }
+    if($ent === "companies") {
+        $data["update"][0]["contacts_id"][] = $ent_array_id["contacts"];
+    }
+    $data["update"][0]["customers_id"][] = $ent_array_id["customers"];
+    $data["update"][0]["leads_id"][] = $ent_array_id["leads"];
 }
 
 if(isset($_POST["numbers"])) {
@@ -60,15 +86,19 @@ if(isset($_POST["numbers"])) {
         //число оставшихся элементов
         $pack_mod_count = $number % $max_count;
 
+        $ent_array_id = array();
+
         for ($i = 0; $i < $pack_count; $i++) {
             foreach($entities as $val) {
-                add_entity($val, $max_count, $i);
+                add_entity($val, $max_count, $ent_array_id, $i);
             }
         }
         if($pack_mod_count > 0) {
             foreach($entities as $val) {
-                add_entity($val, $pack_mod_count);
+                add_entity($val, $pack_mod_count, $ent_array_id);
             }
         }
+
+        print_r($ent_array_id);
     }
 }
