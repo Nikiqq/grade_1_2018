@@ -3,7 +3,8 @@
 require_once 'app_config.php';
 require_once 'autorization.php';
 
-function add_entity($ent, $number) {
+function add_entity($ent, $number, $number_pack = 0) {
+
     $data = array (
         'add' =>
             array (
@@ -12,11 +13,12 @@ function add_entity($ent, $number) {
     );
 
     for($i = 0; $i < $number; $i++) {
+        $ind_ent = $number_pack * $number + $i;
         if($ent !== "customers") {
-            $data["add"][] = array('name' => "{$ent}-{$i}", );
+            $data["add"][] = array('name' => "{$ent}-{$ind_ent}", );
         }
         else {
-            $data["add"][] = array('name' => "{$ent}-{$i}", 'next_date' => '1551870660');
+            $data["add"][] = array('name' => "{$ent}-{$ind_ent}", 'next_date' => time() + $i);
         }
     }
 
@@ -44,11 +46,23 @@ function add_entity($ent, $number) {
     $result = json_decode($out,TRUE);
 }
 
-//add_entity("leads");
 if(isset($_POST)) {
     foreach($_POST as $key => $val) {
-        if($val) {
-            add_entity($key, $val);
+        if($val > 0) {
+            //макс число на пакет
+            $max_count = 400;
+            //число целых пакетов
+            $pack_count = intdiv($val, $max_count);
+            echo $pack_count;
+            //число оставшихся элементов
+            $pack_mod_count = $val % $max_count;
+            echo $pack_mod_count;
+            for($i = 0; $i < $pack_count; $i ++) {
+                add_entity($key, $max_count, $i);
+            }
+            if($pack_mod_count > 0) {
+                add_entity($key, $pack_mod_count);
+            }
         }
     }
 }
