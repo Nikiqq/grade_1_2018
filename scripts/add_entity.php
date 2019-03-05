@@ -46,25 +46,29 @@ function add_entity($ent, $number, $number_pack = 0) {
     $result = json_decode($out,TRUE);
 }
 
-if(isset($_POST)) {
-    foreach($_POST as $key => $val) {
-        if($val > 0) {
-            //макс число на пакет
-            $max_count = 400;
-            //число целых пакетов
-            $pack_count = intdiv($val, $max_count);
-            echo $pack_count;
-            //число оставшихся элементов
-            $pack_mod_count = $val % $max_count;
-            echo $pack_mod_count;
-            for($i = 0; $i < $pack_count; $i ++) {
-                add_entity($key, $max_count, $i);
+if(isset($_POST["numbers"])) {
+    $entities = ["contacts", "companies", "leads", "customers"];
+    $number = $_POST["numbers"];
+    if ($number > 0) {
+
+        //макс число на пакет
+        $max_count = 400;
+
+        //число целых пакетов
+        $pack_count = intdiv($number, $max_count);
+
+        //число оставшихся элементов
+        $pack_mod_count = $number % $max_count;
+
+        for ($i = 0; $i < $pack_count; $i++) {
+            foreach($entities as $val) {
+                add_entity($val, $max_count, $i);
             }
-            if($pack_mod_count > 0) {
-                add_entity($key, $pack_mod_count);
+        }
+        if($pack_mod_count > 0) {
+            foreach($entities as $val) {
+                add_entity($val, $pack_mod_count);
             }
         }
     }
 }
-
-

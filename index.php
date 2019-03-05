@@ -16,20 +16,8 @@ require_once "scripts/autorization.php";
 <body>
 <form action="" class="form" method="POST">
     <p class="form__item">
-        <label for="contacts">Количество контактов</label>
-        <input class="form__input" type="number" id="contacts" name="contacts">
-    </p>
-    <p class="form__item">
-        <label for="companies">Количество компаний</label>
-        <input class="form__input" type="number" id="companies" name="companies">
-    </p>
-    <p class="form__item">
-        <label for="deals">Количество сделок</label>
-        <input class="form__input" type="number" id="deals" name="leads">
-    </p>
-    <p class="form__item">
-        <label for="customers">Количество покупателей</label>
-        <input class="form__input" type="number" id="customers" name="customers">
+        <label for="numbers">Количество сущностей</label>
+        <input class="form__input" type="number" id="numbers" name="numbers">
     </p>
     <input type="submit" value="Создать" class="form__submit">
 </form>
