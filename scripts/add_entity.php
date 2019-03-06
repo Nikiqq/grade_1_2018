@@ -3,6 +3,33 @@
 require_once 'app_config.php';
 require_once 'autorization.php';
 
+function add_fields ($name, $field_type, $ent_id, $field_id) {
+    $enum = array();
+    for($i = 0; $i < 10; $i++) {
+        $enum[$i] = "Значение-$i";
+    }
+
+    $data = array (
+        'add' =>
+            array (
+                0 =>
+                    array (
+                        'name' => $name,
+                        'type' => $field_type,
+                        'element_type' => $ent_id,
+                        'origin' => $field_id,
+                        'enums' => $enum,
+                    ),
+            ),
+    );
+    print_r($data);
+    $link = "https://nkirillov.amocrm.ru/api/v2/fields";
+
+    $out = add_update($data, $link);
+    $result = json_decode($out,TRUE);
+    print_r($result);
+}
+
 function add_entity($ent, $number, $ent_array_id, $number_pack, $max_count) {
 
     global $ent_array_id;
@@ -86,37 +113,39 @@ function add_update ($data, $link) {
 if(isset($_POST["numbers"])) {
     $entities = ["contacts", "companies", "leads", "customers"];
     $number = $_POST["numbers"];
-    if ($number > 0) {
+//    if ($number > 0) {
+//
+//        //макс число на пакет
+//        $max_count = 200;
+//
+//        //число целых пакетов
+//        $pack_count = intdiv($number, $max_count);
+//
+//        //число оставшихся элементов
+//        $pack_mod_count = $number % $max_count;
+//
+//        //массив id сущностей , которые были созданы в пакете
+//        $ent_array_id = array();
+//
+//        for ($i = 0; $i < $pack_count + 1; $i++) {
+//            //если целый пакет, то передаем макс возможное число данных
+//            $num_ent = $max_count;
+//            //если последняя итерация, то передаем остаток пакета
+//            if($i === $pack_count && $pack_mod_count > 0) {
+//                $num_ent = $pack_mod_count;
+//            }
+//            //для каждой сущности создаем указанное число
+//            foreach($entities as $val) {
+//                add_entity($val, $num_ent, $ent_array_id, $i, $max_count);
+//            }
+//
+//            //связываем контакты со всеми и компании со всеми
+//            connect_entity("contacts", $num_ent, $ent_array_id, $i, $max_count);
+//            connect_entity("companies", $num_ent, $ent_array_id, $i, $max_count);
+//        }
+//
+//        echo "Работает!";
+//    }
 
-        //макс число на пакет
-        $max_count = 200;
-
-        //число целых пакетов
-        $pack_count = intdiv($number, $max_count);
-
-        //число оставшихся элементов
-        $pack_mod_count = $number % $max_count;
-
-        //массив id сущностей , которые были созданы в пакете
-        $ent_array_id = array();
-
-        for ($i = 0; $i < $pack_count + 1; $i++) {
-            //если целый пакет, то передаем макс возможное число данных
-            $num_ent = $max_count;
-            //если последняя итерация, то передаем остаток пакета
-            if($i === $pack_count && $pack_mod_count > 0) {
-                $num_ent = $pack_mod_count;
-            }
-            //для каждой сущности создаем указанное число
-            foreach($entities as $val) {
-                add_entity($val, $num_ent, $ent_array_id, $i, $max_count);
-            }
-
-            //связываем контакты со всеми и компании со всеми
-            connect_entity("contacts", $num_ent, $ent_array_id, $i, $max_count);
-            connect_entity("companies", $num_ent, $ent_array_id, $i, $max_count);
-        }
-
-        echo "Работает!";
-    }
+    add_fields("test", "5", "1", "12345");
 }

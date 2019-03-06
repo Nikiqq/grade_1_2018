@@ -10,7 +10,7 @@ $(function(){
             url: "scripts/add_entity.php",
             data: numbers,
             success: function(result){
-                alert(result);
+                console.log(result);
             }
         });
     })
