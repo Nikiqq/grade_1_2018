@@ -44,7 +44,7 @@ function add_fields ($name, $field_type, $ent_id, $field_id) {
 }
 
 function add_entity($ent, $number, $ent_array_id, $number_pack, $max_count) {
-
+    global $array_contacts_id;
     global $ent_array_id;
     $data = array (
         'add' =>
@@ -69,6 +69,12 @@ function add_entity($ent, $number, $ent_array_id, $number_pack, $max_count) {
     $result = json_decode($out,TRUE);
 
     $ent_array_id[$ent] = $result["_embedded"]["items"];
+
+    if($ent === "contacts") {
+        foreach($result["_embedded"]["items"] as $val) {
+            $array_contacts_id[] = $val["id"];
+        }
+    }
 }
 
 function connect_entity($ent, $number, $ent_array_id, $number_pack, $max_count) {
@@ -100,6 +106,33 @@ function connect_entity($ent, $number, $ent_array_id, $number_pack, $max_count) 
     $out = get_post_query($link, $data);
 }
 
+function set_multi_select($selector_id, $number, $array_key_selector, $array_contacts, $number_pack, $max_count) {
+    $data = array (
+        'update' =>
+            array (
+
+            ),
+    );
+
+    for($i = 0; $i < $number; $i++) {
+        $ind_ent = $number_pack * $max_count + $i;
+        $data["update"][$i]["id"] = $array_contacts[$ind_ent];
+        $data["update"][$i]["updated_at"] = (time() + $i + 100000);
+        $data["update"][$i]["custom_fields"][0]["id"] = $selector_id;
+        $count = mt_rand (0 , 9);
+        $values = array();
+        for($j = 0; $j < $count; $j ++) {
+            $values[] = $array_key_selector[mt_rand(0, 9)];
+        }
+        $data["update"][$i]["custom_fields"][0]["values"] = $values;
+    }
+
+
+    $link = "https://nkirillov.amocrm.ru/api/v2/contacts";
+    $out = get_post_query($link, $data);
+    $result = json_decode($out,TRUE);
+}
+
 function get_post_query ($link, $data = 0) {
 
     $headers[] = "Content-Type: application/json";
@@ -126,12 +159,18 @@ function get_post_query ($link, $data = 0) {
 }
 
 if(isset($_POST["numbers"])) {
+    //макс число на пакет
+    $max_count = 500;
+
+    //массив для хранения id контактов
+    $array_contacts_id = array();
+
+    //массив сущностей
     $entities = ["contacts", "companies", "leads", "customers"];
+
+    //число в инпуте
     $number = $_POST["numbers"];
     if ($number > 0) {
-
-        //макс число на пакет
-        $max_count = 200;
 
         //число целых пакетов
         $pack_count = intdiv($number, $max_count);
@@ -162,8 +201,10 @@ if(isset($_POST["numbers"])) {
         echo "Работает!";
     }
 
+    //создаем поле, или просто получаем его id
     $multi_select_id = add_fields("test", "5", "1", "12345");
 
+    //берем id значение в мультиселекте
     $link = 'https://nkirillov.amocrm.ru/api/v2/account?with=custom_fields';
     $out = get_post_query($link);
     $result = json_decode($out,TRUE);
@@ -173,34 +214,22 @@ if(isset($_POST["numbers"])) {
         $array_key_multi_select[] = $key;
     }
 
+    //число контактов (хотя конечно лучше написать функцию, потому что контакты уже могут быть и число будет неверное..)
+    $num_contacts = count($array_contacts_id);
 
-    $link = 'https://nkirillov.amocrm.ru/api/v2/contacts/';
-    $out = get_post_query($link);
-    $result = json_decode($out,TRUE);
+    //число целых пакетов
+    $pack_count = intdiv($num_contacts, $max_count);
 
-    $data = array (
-        'update' =>
-            array (
+    //число оставшихся элементов
+    $pack_mod_count = $num_contacts % $max_count;
 
-            ),
-    );
-    $i = 0;
-    foreach($result["_embedded"]["items"] as $key => $val) {
-        $data["update"][$i]["id"] = $val["id"];
-        $data["update"][$i]["updated_at"] = time() + $i;
-        $data["update"][$i]["custom_fields"][0]["id"] = $multi_select_id;
-        $count = mt_rand (0 , 9);
-        $values = array();
-        for($j = 0; $j < $count; $j ++) {
-            $values[] = $array_key_multi_select[mt_rand(0, 9)];
+    for ($i = 0; $i < $pack_count + 1; $i++) {
+        //если целый пакет, то передаем макс возможное число данных
+        $num_ent = $max_count;
+        //если последняя итерация, то передаем остаток пакета
+        if($i === $pack_count && $pack_mod_count > 0) {
+            $num_ent = $pack_mod_count;
         }
-        $data["update"][$i]["custom_fields"][0]["values"] = $values;
-        $i++;
+        set_multi_select($multi_select_id, $num_ent, $array_key_multi_select, $array_contacts_id, $i, $max_count);
     }
-
-    $link = "https://nkirillov.amocrm.ru/api/v2/contacts";
-    $out = get_post_query($link, $data);
-    $result = json_decode($out,TRUE);
-    print_r($result);
-
 }

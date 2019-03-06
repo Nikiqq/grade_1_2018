@@ -14,4 +14,20 @@ $(function(){
             }
         });
     })
+
+    $(".form-text").on("submit", function(event){
+        event.preventDefault();
+        let numbers = {};
+        $(".form-text__input").each(function(index, element) {
+            numbers[$(element).attr("name")] = element.value;
+        })
+        $.ajax({
+            type: "POST",
+            url: "scripts/add_text_field.php",
+            data: numbers,
+            success: function(result){
+                console.log(result);
+            }
+        });
+    })
 })
