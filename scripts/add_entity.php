@@ -4,6 +4,19 @@ require_once 'app_config.php';
 require_once 'autorization.php';
 
 function add_fields ($name, $field_type, $ent_id, $field_id) {
+
+    //проверка на наличие уже такого поля
+    $link = 'https://nkirillov.amocrm.ru/api/v2/account?with=custom_fields';
+    $out = get_post_query($link);
+    $result = json_decode($out,TRUE);
+
+    foreach($result["_embedded"]["custom_fields"]["contacts"] as $key => $val) {
+        if($val["name"] === $name) {
+            return $val["id"];
+        }
+    };
+
+    //если такого поля еще не создавали
     $enum = array();
     for($i = 0; $i < 10; $i++) {
         $enum[$i] = "Значение-$i";
@@ -189,4 +202,5 @@ if(isset($_POST["numbers"])) {
     $out = get_post_query($link, $data);
     $result = json_decode($out,TRUE);
     print_r($result);
+
 }
