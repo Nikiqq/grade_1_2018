@@ -3,7 +3,7 @@
 require_once 'app_config.php';
 require_once 'autorization.php';
 
-function add_entity($ent, $number, $ent_array_id, $number_pack = 0) {
+function add_entity($ent, $number, $ent_array_id, $number_pack, $max_count) {
 
     global $ent_array_id;
     $data = array (
@@ -14,7 +14,7 @@ function add_entity($ent, $number, $ent_array_id, $number_pack = 0) {
     );
 
     for($i = 0; $i < $number; $i++) {
-        $ind_ent = $number_pack * $number + $i;
+        $ind_ent = $number_pack * $max_count + $i;
         if($ent !== "customers") {
             $data["add"][] = array('name' => "{$ent}-{$ind_ent}", );
         }
@@ -28,35 +28,36 @@ function add_entity($ent, $number, $ent_array_id, $number_pack = 0) {
     $out = add_update($data, $link);
     $result = json_decode($out,TRUE);
 
-    $ent_array_id[$ent] = $result["_embedded"]["items"][0]["id"];
+    $ent_array_id[$ent] = $result["_embedded"]["items"];
 }
 
-function connect_entity($ent, $ent_array_id) {
+function connect_entity($ent, $number, $ent_array_id, $number_pack, $max_count) {
 
     $data = array (
         'update' =>
             array (
-                0 =>
-                    array (
-                        'id' => $ent_array_id[$ent],
-                        'updated_at' => time()
-                    ),
+
             ),
     );
 
-    if($ent === "contacts") {
-        $data["update"][0]["company_id"] =  $ent_array_id["companies"];
+    for($i = 0; $i < $number; $i++) {
+        $ind_ent = $number_pack * $max_count + $i;
+        $data["update"][$ind_ent]["id"] =  $ent_array_id[$ent][$i]["id"];
+        $data["update"][$ind_ent]["updated_at"] =  time() + $ind_ent;
+
+        if($ent === "contacts") {
+            $data["update"][$ind_ent]["company_id"] =  $ent_array_id["companies"][$i]["id"];
+        }
+        if($ent === "companies") {
+            $data["update"][$ind_ent]["contacts_id"][] =  $ent_array_id["contacts"][$i]["id"];
+        }
+        $data["update"][$ind_ent]["customers_id"][] =  $ent_array_id["customers"][$i]["id"];
+        $data["update"][$ind_ent]["leads_id"][] =  $ent_array_id["leads"][$i]["id"];
     }
-    if($ent === "companies") {
-        $data["update"][0]["contacts_id"][] =  $ent_array_id["contacts"];
-    }
-    $data["update"][0]["customers_id"][] =  $ent_array_id["customers"];
-    $data["update"][0]["leads_id"][] =  $ent_array_id["leads"];
 
     $link = "https://nkirillov.amocrm.ru/api/v2/$ent";
 
     $out = add_update($data, $link);
-    $result = json_decode($out,TRUE);
 }
 
 function add_update ($data, $link) {
@@ -88,7 +89,7 @@ if(isset($_POST["numbers"])) {
     if ($number > 0) {
 
         //макс число на пакет
-        $max_count = 400;
+        $max_count = 200;
 
         //число целых пакетов
         $pack_count = intdiv($number, $max_count);
@@ -96,26 +97,26 @@ if(isset($_POST["numbers"])) {
         //число оставшихся элементов
         $pack_mod_count = $number % $max_count;
 
+        //массив id сущностей , которые были созданы в пакете
         $ent_array_id = array();
 
-        for ($i = 0; $i < $pack_count; $i++) {
+        for ($i = 0; $i < $pack_count + 1; $i++) {
+            //если целый пакет, то передаем макс возможное число данных
+            $num_ent = $max_count;
+            //если последняя итерация, то передаем остаток пакета
+            if($i === $pack_count && $pack_mod_count > 0) {
+                $num_ent = $pack_mod_count;
+            }
+            //для каждой сущности создаем указанное число
             foreach($entities as $val) {
-                add_entity($val, $max_count, $ent_array_id, $i);
+                add_entity($val, $num_ent, $ent_array_id, $i, $max_count);
             }
 
             //связываем контакты со всеми и компании со всеми
-            connect_entity("contacts", $ent_array_id);
-            connect_entity("companies", $ent_array_id);
+            connect_entity("contacts", $num_ent, $ent_array_id, $i, $max_count);
+            connect_entity("companies", $num_ent, $ent_array_id, $i, $max_count);
         }
-        if($pack_mod_count > 0) {
-            foreach($entities as $val) {
-                add_entity($val, $pack_mod_count, $ent_array_id);
-            }
 
-            //связываем контакты со всеми и компании со всеми
-            connect_entity("contacts", $ent_array_id);
-            connect_entity("companies", $ent_array_id);
-        }
         echo "Работает!";
     }
 }
