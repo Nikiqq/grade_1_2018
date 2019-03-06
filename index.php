@@ -14,14 +14,24 @@ require_once "scripts/autorization.php";
     <title>Create entities</title>
 </head>
 <body>
-<form action="" class="form" method="POST">
-    <p class="form__item">
-        <label for="numbers">Количество сущностей</label>
-        <input class="form__input" type="number" id="numbers" name="numbers">
-    </p>
-    <input type="submit" value="Создать" class="form__submit">
-</form>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="js/main.js"></script>
+    <form action="" class="form form-entity" method="POST">
+        <p class="form-entity__item">
+            <label for="numbers">Количество сущностей</label>
+            <input class="form-entity__input" type="number" id="numbers" name="numbers">
+        </p>
+        <input type="submit" value="Создать" class="form-entity__submit">
+    </form>
+
+    <form action="" class="form form-text" method="POST">
+        <p class="form-text__item">
+            <label for="numbers">Добавить текстовое поле к сущности (id)</label>
+            <input class="form-text__input" type="number" id="numbers" name="numbers">
+        </p>
+        <input type="submit" value="Добавить" class="form-text__submit">
+    </form>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>

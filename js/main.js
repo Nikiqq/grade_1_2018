@@ -1,8 +1,8 @@
 $(function(){
-    $(".form").on("submit", function(event){
+    $(".form-entity").on("submit", function(event){
         event.preventDefault();
         let numbers = {};
-        $(".form__input").each(function(index, element) {
+        $(".form-entity__input").each(function(index, element) {
             numbers[$(element).attr("name")] = element.value;
         })
         $.ajax({
