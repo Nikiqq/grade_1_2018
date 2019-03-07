@@ -37,6 +37,7 @@ $(function(){
         $(".form-note__input").each(function(index, element) {
             add_note_field[$(element).attr("name")] = element.value;
         })
+        add_note_field["add_note_field_list"] = $(".form-note__select").val();
         $.ajax({
             type: "POST",
             url: "scripts/add_entity.php",

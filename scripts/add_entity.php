@@ -3,7 +3,8 @@
 require_once 'app_config.php';
 require_once 'autorization.php';
 
-function add_notes($element_id, $ent_id, $note_type) {
+function add_notes($element_id, $ent_id, $note_type, $text_note) {
+
     $data = array (
         'add' =>
             array (
@@ -11,15 +12,29 @@ function add_notes($element_id, $ent_id, $note_type) {
                     array (
                         'element_id' => $element_id,
                         'element_type' => "$ent_id",
-                        'note_type' => "$note_type",
-                        'text' => 'My notes',
+                        'note_type' => "$note_type"
                     ),
             ),
     );
+
+    if($note_type == 4) {
+        $data["add"][0]["text"] = "$text_note";
+    }
+    if($note_type == 10) {
+        $data["add"][0]["responsible_user_id"] = "24971143";
+        $data["add"][0]["created_by"] = "24971143";
+        $data["add"][0]["params"] = array(
+                                        'UNIQ' => "BCEFA2341",
+                                        'DURATION' => '33',
+                                        "PHONE" => "79254679145"
+                                    );
+    }
+
     $link = "https://nkirillov.amocrm.ru/api/v2/notes";
 
     $out = get_post_query($link, $data);
     $result = json_decode($out,TRUE);
+    print_r($result);
 }
 
 function add_fields ($name, $field_type, $ent_id, $field_id, $name_ent = "contacts") {
@@ -285,10 +300,13 @@ if(isset($_POST["numbers_text_field"]) && !empty($_POST["numbers_text_field"])) 
 }
 
 //обработка 3 пункта
-if(isset($_POST["add_note_field"]) && !empty($_POST["add_note_field"])) {
-    $ent_id = $_POST["add_note_field"];
-    //массив элементов для сущностей
-    $entities_element_id = [1 => 34985425, 2 => 12109173, 3 => 34986455, 12 => 586115];
-    add_notes($entities_element_id[$ent_id] ,$ent_id, 4); //обычное примечание
+if(isset($_POST["add_note_field_element"]) && !empty($_POST["add_note_field_element"]) && isset($_POST["add_note_field_ent_id"]) && !empty($_POST["add_note_field_ent_id"])) {
+
+    $ent_id = $_POST["add_note_field_ent_id"];
+    $entities_element_id = $_POST["add_note_field_element"];
+    $type = $_POST["add_note_field_list"];
+    $text = $_POST["add_note_field_text"];
+
+    add_notes($entities_element_id ,$ent_id, $type, $text);
 
 }

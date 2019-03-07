@@ -31,8 +31,23 @@ require_once "scripts/autorization.php";
     </form>
     <form action="" class="form form-note" method="POST">
         <p class="form-note__item">
-            <label for="add_note_field">Добавить примечания к сущности (id)</label>
-            <input class="form-note__input" type="number" id="add_note_field" name="add_note_field">
+            <label for="add_note_field_element">Элемент сущности (id)</label>
+            <input class="form-note__input" type="number" id="add_note_field_element" name="add_note_field_element">
+        </p>
+        <p class="form-note__item">
+            <label for="add_note_field_ent_id">Сущность (id)</label>
+            <input class="form-note__input" type="number" id="add_note_field_ent_id" name="add_note_field_ent_id">
+        </p>
+        <p class="form-note__item">
+            <label for="add_note_field_list">Тип примечания</label>
+            <select class="form-note__select select" id="add_note_field_list" name="add_note_field_list">
+                <option class="select__item" value="4">Обычное примечание</option>
+                <option class="select__item" value="10">Входящий звонок</option>
+            </select>
+        </p>
+        <p class="form-note__item">
+            <label for="add_note_field_text">Текст примечания</label>
+            <input class="form-note__input" type="text" id="add_note_field_text" name="add_note_field_text">
         </p>
         <input type="submit" value="Добавить" class="form-note__submit">
     </form>
