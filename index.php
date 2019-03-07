@@ -29,6 +29,13 @@ require_once "scripts/autorization.php";
         </p>
         <input type="submit" value="Добавить" class="form-text__submit">
     </form>
+    <form action="" class="form form-note" method="POST">
+        <p class="form-note__item">
+            <label for="add_note_field">Добавить примечания к сущности (id)</label>
+            <input class="form-note__input" type="number" id="add_note_field" name="add_note_field">
+        </p>
+        <input type="submit" value="Добавить" class="form-note__submit">
+    </form>
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>

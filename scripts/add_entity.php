@@ -264,3 +264,8 @@ if(isset($_POST["numbers_text_field"]) && !empty($_POST["numbers_text_field"])) 
         echo "Добалено";
     }
 }
+
+//обработка 3 пункта
+if(isset($_POST["add_note_field"]) && !empty($_POST["add_note_field"])) {
+    echo $_POST["add_note_field"];
+}
