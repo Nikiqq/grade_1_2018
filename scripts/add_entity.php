@@ -48,7 +48,10 @@ function add_fields ($name, $field_type, $ent_id, $field_id, $name_ent = "contac
 
     $out = get_post_query($link, $data);
     $result = json_decode($out,TRUE);
+
     return $result["_embedded"]["items"][0]["id"];
+
+
 }
 
 function add_entity($ent, $number, $ent_array_id, $number_pack, $max_count) {
@@ -211,7 +214,7 @@ if(isset($_POST["numbers"]) && !empty($_POST["numbers"])) {
     }
 
     //создаем поле, или просто получаем его id
-    $multi_select_id = add_fields("test", "5", "1", "12345");
+    $multi_select_id = add_fields("test", 5, 1, "12345");
 
     //берем id значение в мультиселекте
     $link = 'https://nkirillov.amocrm.ru/api/v2/account?with=custom_fields';
