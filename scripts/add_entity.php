@@ -10,7 +10,7 @@ function update_element ($elem_id, $val, $field_id, $ent_name) {
                 0 =>
                     array (
                         'id' => $elem_id,
-                        'updated_at' => (time() + $i + 100000),
+                        'updated_at' => time(),
                         'custom_fields' =>
                             array (
                                 0 =>
@@ -33,8 +33,6 @@ function update_element ($elem_id, $val, $field_id, $ent_name) {
 
     $out = get_post_query($link, $data);
     $result = json_decode($out,TRUE);
-    print_r($result);
-
 }
 
 function add_notes($element_id, $ent_id, $note_type, $text_note) {
@@ -68,7 +66,6 @@ function add_notes($element_id, $ent_id, $note_type, $text_note) {
 
     $out = get_post_query($link, $data);
     $result = json_decode($out,TRUE);
-    print_r($result);
 }
 
 function add_fields ($name, $field_type, $ent_id, $field_id, $name_ent = "contacts", $elem_id = 0, $value = "") {
@@ -138,7 +135,7 @@ function add_entity($ent, $number, $ent_array_id, $number_pack, $max_count) {
             $data["add"][] = array('name' => "{$ent}-{$ind_ent}", );
         }
         else {
-            $data["add"][] = array('name' => "{$ent}-{$ind_ent}", 'next_date' => time() + $i);
+            $data["add"][] = array('name' => "{$ent}-{$ind_ent}", 'next_date' => time());
         }
     }
 
@@ -168,7 +165,7 @@ function connect_entity($ent, $number, $ent_array_id, $number_pack, $max_count) 
     for($i = 0; $i < $number; $i++) {
         $ind_ent = $number_pack * $max_count + $i;
         $data["update"][$ind_ent]["id"] =  $ent_array_id[$ent][$i]["id"];
-        $data["update"][$ind_ent]["updated_at"] =  time() + $ind_ent;
+        $data["update"][$ind_ent]["updated_at"] =  time();
 
         if($ent === "contacts") {
             $data["update"][$ind_ent]["company_id"] =  $ent_array_id["companies"][$i]["id"];
@@ -196,7 +193,7 @@ function set_multi_select($selector_id, $number, $array_key_selector, $array_con
     for($i = 0; $i < $number; $i++) {
         $ind_ent = $number_pack * $max_count + $i;
         $data["update"][$i]["id"] = $array_contacts[$ind_ent];
-        $data["update"][$i]["updated_at"] = (time() + $i + 100000);
+        $data["update"][$i]["updated_at"] = time();
         $data["update"][$i]["custom_fields"][0]["id"] = $selector_id;
         $count = mt_rand (0 , 9);
         $values = array();
