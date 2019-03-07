@@ -3,6 +3,25 @@
 require_once 'app_config.php';
 require_once 'autorization.php';
 
+function add_notes($element_id, $ent_id, $note_type) {
+    $data = array (
+        'add' =>
+            array (
+                0 =>
+                    array (
+                        'element_id' => $element_id,
+                        'element_type' => "$ent_id",
+                        'note_type' => "$note_type",
+                        'text' => 'My notes',
+                    ),
+            ),
+    );
+    $link = "https://nkirillov.amocrm.ru/api/v2/notes";
+
+    $out = get_post_query($link, $data);
+    $result = json_decode($out,TRUE);
+}
+
 function add_fields ($name, $field_type, $ent_id, $field_id, $name_ent = "contacts") {
 
     //проверка на наличие уже такого поля
@@ -267,5 +286,9 @@ if(isset($_POST["numbers_text_field"]) && !empty($_POST["numbers_text_field"])) 
 
 //обработка 3 пункта
 if(isset($_POST["add_note_field"]) && !empty($_POST["add_note_field"])) {
-    echo $_POST["add_note_field"];
+    $ent_id = $_POST["add_note_field"];
+    //массив элементов для сущностей
+    $entities_element_id = [1 => 34985425, 2 => 12109173, 3 => 34986455, 12 => 586115];
+    add_notes($entities_element_id[$ent_id] ,$ent_id, 4); //обычное примечание
+
 }
