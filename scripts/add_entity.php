@@ -3,6 +3,40 @@
 require_once 'app_config.php';
 require_once 'autorization.php';
 
+function update_element ($elem_id, $val, $field_id, $ent_name) {
+    $data = array (
+        'update' =>
+            array (
+                0 =>
+                    array (
+                        'id' => $elem_id,
+                        'updated_at' => (time() + $i + 100000),
+                        'custom_fields' =>
+                            array (
+                                0 =>
+                                    array (
+                                        'id' => $field_id,
+                                        'values' =>
+                                            array (
+                                                0 =>
+                                                    array (
+                                                        'value' => "$val",
+                                                    ),
+                                            ),
+                                    ),
+                            ),
+                    ),
+            ),
+    );
+
+    $link = "https://nkirillov.amocrm.ru/api/v2/$ent_name";
+
+    $out = get_post_query($link, $data);
+    $result = json_decode($out,TRUE);
+    print_r($result);
+
+}
+
 function add_notes($element_id, $ent_id, $note_type, $text_note) {
 
     $data = array (
@@ -37,7 +71,7 @@ function add_notes($element_id, $ent_id, $note_type, $text_note) {
     print_r($result);
 }
 
-function add_fields ($name, $field_type, $ent_id, $field_id, $name_ent = "contacts") {
+function add_fields ($name, $field_type, $ent_id, $field_id, $name_ent = "contacts", $elem_id = 0, $value = "") {
 
     //проверка на наличие уже такого поля
     $link = 'https://nkirillov.amocrm.ru/api/v2/account?with=custom_fields';
@@ -45,8 +79,9 @@ function add_fields ($name, $field_type, $ent_id, $field_id, $name_ent = "contac
     $result = json_decode($out,TRUE);
 
     foreach($result["_embedded"]["custom_fields"][$name_ent] as $key => $val) {
-        //если текстовое поле и уже существует текстовое поле с таким именем
-        if($field_type === 1 && $val["field_type"] === 1 && $val["name"] === $name) {
+        //если текстовое поле и уже существует текстовое поле
+        if($field_type === 1 && $val["field_type"] === 1) {
+            update_element($elem_id, $value, $val["id"], $name_ent);
             return 0;
         }
         //если мультитекст и имя совпадает - вернем id уже существующего
@@ -84,7 +119,6 @@ function add_fields ($name, $field_type, $ent_id, $field_id, $name_ent = "contac
     $result = json_decode($out,TRUE);
 
     return $result["_embedded"]["items"][0]["id"];
-
 
 }
 
@@ -281,8 +315,10 @@ if(isset($_POST["numbers"]) && !empty($_POST["numbers"])) {
 }
 
 //обработка 2 пункта
-if(isset($_POST["numbers_text_field"]) && !empty($_POST["numbers_text_field"])) {
-    $ent_id = $_POST["numbers_text_field"];
+if(isset($_POST["numbers_text_field_ent_id"]) && !empty($_POST["numbers_text_field_ent_id"])) {
+    $elem_id = $_POST["numbers_text_field_element_id"];
+    $ent_id = $_POST["numbers_text_field_ent_id"];
+    $value = $_POST["numbers_text_field_text"];
     $name = 'my_text_field';
     $field_type = 1; //TEXT FIELD
     $field_id = 'my_text_field'; // id my_text_field
@@ -290,11 +326,12 @@ if(isset($_POST["numbers_text_field"]) && !empty($_POST["numbers_text_field"])) 
     //массив сущностей
     $entities = [1 => "contacts", 2 => "leads", 3 => "companies", 12 => "customers"];
 
-    $useless_id = add_fields($name, $field_type, $ent_id, $field_id, $entities[$ent_id]);
+    $useless_id = add_fields($name, $field_type, $ent_id, $field_id, $entities[$ent_id], $elem_id, $value);
     if(!$useless_id) {
-        echo "Не добалено, уже существует";
+        echo "Уже существует текстовое поле, просто изменим его значение";
     }
     else {
+        update_element($elem_id, $value, $useless_id, $entities[$ent_id]);
         echo "Добалено";
     }
 }

@@ -21,14 +21,25 @@ require_once "scripts/autorization.php";
         </p>
         <input type="submit" value="Создать" class="form-entity__submit">
     </form>
+    <hr>
 
     <form action="" class="form form-text" method="POST">
         <p class="form-text__item">
-            <label for="numbers_text_field">Добавить текстовое поле к сущности (id)</label>
-            <input class="form-text__input" type="number" id="numbers_text_field" name="numbers_text_field">
+            <label for="numbers_text_field_element_id">Элемент сущности (id)</label>
+            <input class="form-text__input" type="number" id="numbers_text_field_element_id" name="numbers_text_field_element_id">
+        </p>
+        <p class="form-text__item">
+            <label for="numbers_text_field_ent_id">Сущность (id)</label>
+            <input class="form-text__input" type="number" id="numbers_text_field_ent_id" name="numbers_text_field_ent_id">
+        </p>
+        <p class="form-text__item">
+            <label for="numbers_text_field_text">Текст</label>
+            <input class="form-text__input" type="text" id="numbers_text_field_text" name="numbers_text_field_text">
         </p>
         <input type="submit" value="Добавить" class="form-text__submit">
     </form>
+    <hr>
+
     <form action="" class="form form-note" method="POST">
         <p class="form-note__item">
             <label for="add_note_field_element">Элемент сущности (id)</label>
@@ -51,6 +62,7 @@ require_once "scripts/autorization.php";
         </p>
         <input type="submit" value="Добавить" class="form-note__submit">
     </form>
+    <hr>
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
