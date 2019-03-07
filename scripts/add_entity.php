@@ -3,25 +3,25 @@
 require_once 'app_config.php';
 require_once 'autorization.php';
 
-function add_fields ($name, $field_type, $ent_id, $field_id) {
+function add_fields ($name, $field_type, $ent_id, $field_id, $name_ent = "contacts") {
 
     //проверка на наличие уже такого поля
     $link = 'https://nkirillov.amocrm.ru/api/v2/account?with=custom_fields';
     $out = get_post_query($link);
     $result = json_decode($out,TRUE);
 
-    foreach($result["_embedded"]["custom_fields"]["contacts"] as $key => $val) {
-        if($val["name"] === $name) {
+    foreach($result["_embedded"]["custom_fields"][$name_ent] as $key => $val) {
+        //если текстовое поле и уже существует текстовое поле с таким именем
+        if($field_type === 1 && $val["field_type"] === 1 && $val["name"] === $name) {
+            return 0;
+        }
+        //если мультитекст и имя совпадает - вернем id уже существующего
+        if($field_type === 5 && $val["name"] === $name) {
             return $val["id"];
         }
     };
 
     //если такого поля еще не создавали
-    $enum = array();
-    for($i = 0; $i < 10; $i++) {
-        $enum[$i] = "Значение-$i";
-    }
-
     $data = array (
         'add' =>
             array (
@@ -30,11 +30,19 @@ function add_fields ($name, $field_type, $ent_id, $field_id) {
                         'name' => $name,
                         'type' => $field_type,
                         'element_type' => $ent_id,
-                        'origin' => $field_id,
-                        'enums' => $enum,
+                        'origin' => $field_id
                     ),
             ),
     );
+
+    //если мультисписок, то генерим 10 значений
+    if($field_type === 5) {
+        $enum = array();
+        for($i = 0; $i < 10; $i++) {
+            $enum[$i] = "Значение-$i";
+        }
+        $data["add"][0]['enums'] = $enum;
+    }
 
     $link = "https://nkirillov.amocrm.ru/api/v2/fields";
 
@@ -241,4 +249,15 @@ if(isset($_POST["numbers_text_field"]) && !empty($_POST["numbers_text_field"])) 
     $name = 'my_text_field';
     $field_type = 1; //TEXT FIELD
     $field_id = 'my_text_field'; // id my_text_field
+
+    //массив сущностей
+    $entities = [1 => "contacts", 2 => "leads", 3 => "companies", 12 => "customers"];
+
+    $useless_id = add_fields($name, $field_type, $ent_id, $field_id, $entities[$ent_id]);
+    if(!$useless_id) {
+        echo "Не добалено, уже существует";
+    }
+    else {
+        echo "Добалено";
+    }
 }
