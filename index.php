@@ -24,8 +24,8 @@ require_once "scripts/autorization.php";
 
     <form action="" class="form form-text" method="POST">
         <p class="form-text__item">
-            <label for="numbers">Добавить текстовое поле к сущности (id)</label>
-            <input class="form-text__input" type="number" id="numbers" name="numbers">
+            <label for="numbers_text_field">Добавить текстовое поле к сущности (id)</label>
+            <input class="form-text__input" type="number" id="numbers_text_field" name="numbers_text_field">
         </p>
         <input type="submit" value="Добавить" class="form-text__submit">
     </form>

@@ -17,14 +17,14 @@ $(function(){
 
     $(".form-text").on("submit", function(event){
         event.preventDefault();
-        let numbers = {};
+        let numbers_text_field = {};
         $(".form-text__input").each(function(index, element) {
-            numbers[$(element).attr("name")] = element.value;
+            numbers_text_field[$(element).attr("name")] = element.value;
         })
         $.ajax({
             type: "POST",
-            url: "scripts/add_text_field.php",
-            data: numbers,
+            url: "scripts/add_entity.php",
+            data: numbers_text_field,
             success: function(result){
                 console.log(result);
             }

@@ -158,7 +158,8 @@ function get_post_query ($link, $data = 0) {
     return $out;
 }
 
-if(isset($_POST["numbers"])) {
+//обработка 1 пункта
+if(isset($_POST["numbers"]) && !empty($_POST["numbers"])) {
     //макс число на пакет
     $max_count = 500;
 
@@ -232,4 +233,12 @@ if(isset($_POST["numbers"])) {
         }
         set_multi_select($multi_select_id, $num_ent, $array_key_multi_select, $array_contacts_id, $i, $max_count);
     }
+}
+
+//обработка 2 пункта
+if(isset($_POST["numbers_text_field"]) && !empty($_POST["numbers_text_field"])) {
+    $ent_id = $_POST["numbers_text_field"];
+    $name = 'my_text_field';
+    $field_type = 1; //TEXT FIELD
+    $field_id = 'my_text_field'; // id my_text_field
 }
