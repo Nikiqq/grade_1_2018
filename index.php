@@ -92,7 +92,7 @@ require_once "scripts/autorization.php";
 
     <form action="" class="form form-task-end">
         <p class="form-task-end__item">
-            <label for="add_task_end_id">ID ответственного</label>
+            <label for="add_task_end_id">ID задачи</label>
             <input class="form-task-end__input" type="number" id="add_task_end_id" name="add_task_end_id">
         </p>
         <input type="submit" value="Завершить задачу">

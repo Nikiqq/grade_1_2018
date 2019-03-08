@@ -3,6 +3,24 @@
 require_once 'app_config.php';
 require_once 'autorization.php';
 
+function update_task($id_task) {
+    $data = array (
+        'update' =>
+            array (
+                0 =>
+                    array (
+                        'id' => $id_task,
+                        'updated_at' => time(),
+                        'text' => "Завершена",
+                        'is_completed' => '1',
+                    ),
+            ),
+    );
+    $link = "https://nkirillov.amocrm.ru/api/v2/tasks";
+    $out = get_post_query($link, $data);
+    $result = json_decode($out,TRUE);
+}
+
 function add_task($ent_id, $elem_id, $date_task, $text_task, $user_id) {
     $data = array (
         'add' =>
@@ -382,5 +400,6 @@ if(isset($_POST["add_task_element"]) && !empty($_POST["add_task_element"])) {
 //обработка 5 пункта
 if(isset($_POST["add_task_end_id"]) && !empty($_POST["add_task_end_id"])) {
     $end_task_id = $_POST["add_task_end_id"];
-    echo $end_task_id;
+    update_task($end_task_id);
+    echo "Работает";
 }
