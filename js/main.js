@@ -47,4 +47,21 @@ $(function(){
             }
         });
     })
+
+    $(".form-task").on("submit", function(event){
+        event.preventDefault();
+        let add_task_field = {};
+        $(".form-task__input").each(function(index, element) {
+            add_task_field[$(element).attr("name")] = element.value;
+        })
+
+        $.ajax({
+            type: "POST",
+            url: "scripts/add_entity.php",
+            data: add_task_field,
+            success: function(result){
+                console.log(result);
+            }
+        });
+    })
 })

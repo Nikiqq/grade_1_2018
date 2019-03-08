@@ -14,6 +14,7 @@ require_once "scripts/autorization.php";
     <title>Create entities</title>
 </head>
 <body>
+
     <form action="" class="form form-entity" method="POST">
         <p class="form-entity__item">
             <label for="numbers">Количество сущностей</label>
@@ -63,6 +64,40 @@ require_once "scripts/autorization.php";
         <input type="submit" value="Добавить" class="form-note__submit">
     </form>
     <hr>
+
+    <form action="" class="form form-task" method="POST">
+        <p class="form-task__item">
+            <label for="add_task_element">Элемент сущности (id)</label>
+            <input class="form-task__input" type="number" id="add_task_element" name="add_task_element">
+        </p>
+        <p class="form-task__item">
+            <label for="add_task_ent_id">Сущность (id)</label>
+            <input class="form-task__input" type="number" id="add_task_ent_id" name="add_task_ent_id">
+        </p>
+        <p class="form-task__item">
+            <label for="add_task_date">Дата завершения)</label>
+            <input class="form-task__input" type="date" id="add_task_date" name="add_task_date">
+        </p>
+        <p class="form-task__item">
+            <label for="add_task_text">Текст задачи</label>
+            <input class="form-task__input" type="text" id="add_task_text" name="add_task_text">
+        </p>
+        <p class="form-task__item">
+            <label for="add_task_id">ID ответственного</label>
+            <input class="form-task__input" type="number" id="add_task_id" name="add_task_id">
+        </p>
+        <input type="submit" value="Добавить" class="form-task__submit">
+    </form>
+    <hr>
+
+    <form action="" class="form form-task-end">
+        <p class="form-task-end__item">
+            <label for="add_task_end_id">ID ответственного</label>
+            <input class="form-task-end__input" type="number" id="add_task_end_id" name="add_task_end_id">
+        </p>
+        <input type="submit" value="Завершить задачу">
+    </form>
+
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>

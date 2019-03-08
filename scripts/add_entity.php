@@ -344,3 +344,8 @@ if(isset($_POST["add_note_field_element"]) && !empty($_POST["add_note_field_elem
     add_notes($entities_element_id ,$ent_id, $type, $text);
 
 }
+
+//обработка 4 пункта
+if(isset($_POST["add_task_element"]) && !empty($_POST["add_task_element"])) {
+    echo "hello";
+}
