@@ -275,7 +275,7 @@ function get_post_query ($link, $data = 0) {
 }
 
 //обработка 1 пункта
-if(isset($_POST["numbers"]) && !empty($_POST["numbers"])) {
+if(isset($_POST["number_entities"]) && !empty($_POST["number_entities"])) {
     //макс число на пакет
     $max_count = 500;
 
@@ -286,7 +286,7 @@ if(isset($_POST["numbers"]) && !empty($_POST["numbers"])) {
     $entities = ["contacts", "companies", "leads", "customers"];
 
     //число в инпуте
-    $number = $_POST["numbers"];
+    $number = $_POST["number_entities"];
     if ($number > 0) {
 
         //число целых пакетов
@@ -352,10 +352,10 @@ if(isset($_POST["numbers"]) && !empty($_POST["numbers"])) {
 }
 
 //обработка 2 пункта
-if(isset($_POST["numbers_text_field_ent_id"]) && !empty($_POST["numbers_text_field_ent_id"])) {
-    $elem_id = $_POST["numbers_text_field_element_id"];
-    $ent_id = $_POST["numbers_text_field_ent_id"];
-    $value = $_POST["numbers_text_field_text"];
+if(isset($_POST["text_field_element_id"]) && !empty($_POST["text_field_element_id"]) && isset($_POST["text_field_ent_id"]) && !empty($_POST["text_field_ent_id"]) && isset($_POST["text_field_text"]) && !empty($_POST["text_field_text"])) {
+    $elem_id = $_POST["text_field_element_id"];
+    $ent_id = $_POST["text_field_ent_id"];
+    $value = $_POST["text_field_text"];
     $name = 'my_text_field';
     $field_type = 1; //TEXT FIELD
     $field_id = 'my_text_field'; // id my_text_field
@@ -374,32 +374,32 @@ if(isset($_POST["numbers_text_field_ent_id"]) && !empty($_POST["numbers_text_fie
 }
 
 //обработка 3 пункта
-if(isset($_POST["add_note_field_element"]) && !empty($_POST["add_note_field_element"]) && isset($_POST["add_note_field_ent_id"]) && !empty($_POST["add_note_field_ent_id"])) {
+if(isset($_POST["note_element_id"]) && !empty($_POST["note_element_id"]) && isset($_POST["note_ent_id"]) && !empty($_POST["note_ent_id"]) && isset($_POST["note_list"]) && !empty($_POST["note_list"]) && isset($_POST["note_text"]) && !empty($_POST["note_text"])) {
 
-    $ent_id = $_POST["add_note_field_ent_id"];
-    $entities_element_id = $_POST["add_note_field_element"];
-    $type = $_POST["add_note_field_list"];
-    $text = $_POST["add_note_field_text"];
+    $entities_element_id = $_POST["note_element_id"];
+    $ent_id = $_POST["note_ent_id"];
+    $type = $_POST["note_list"];
+    $text = $_POST["note_text"];
 
     add_notes($entities_element_id ,$ent_id, $type, $text);
 
 }
 
 //обработка 4 пункта
-if(isset($_POST["add_task_element"]) && !empty($_POST["add_task_element"])) {
-    $ent_id = $_POST["add_task_ent_id"];
-    $elem_id = $_POST["add_task_element"];
-    $date_task = $_POST["add_task_date"];
-    $text_task = $_POST["add_task_text"];
-    $user_id = $_POST["add_task_responsible_id"];
+if(isset($_POST["task_element_id"]) && !empty($_POST["task_element_id"]) && isset($_POST["task_ent_id"]) && !empty($_POST["task_ent_id"]) && isset($_POST["task_date"]) && !empty($_POST["task_date"]) && isset($_POST["task_text"]) && !empty($_POST["task_text"]) && isset($_POST["task_responsible_id"]) && !empty($_POST["task_responsible_id"])) {
+    $ent_id = $_POST["task_ent_id"];
+    $elem_id = $_POST["task_element_id"];
+    $date_task = $_POST["task_date"];
+    $text_task = $_POST["task_text"];
+    $user_id = $_POST["task_responsible_id"];
 
     $id_task = add_task($ent_id, $elem_id, $date_task, $text_task, $user_id);
     echo $id_task;
 }
 
 //обработка 5 пункта
-if(isset($_POST["add_task_end_id"]) && !empty($_POST["add_task_end_id"])) {
-    $end_task_id = $_POST["add_task_end_id"];
+if(isset($_POST["task_end_id"]) && !empty($_POST["task_end_id"])) {
+    $end_task_id = $_POST["task_end_id"];
     update_task($end_task_id);
     echo "Работает";
 }

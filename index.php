@@ -16,89 +16,87 @@ require_once "scripts/autorization.php";
 <body>
 
     <form action="" class="form form-entity" method="POST">
-        <p class="form-entity__item">
-            <label for="numbers">Количество сущностей</label>
-            <input class="form-entity__input" type="number" id="numbers" name="numbers">
+        <p class="form__item">
+            <label for="number_entities">Количество сущностей</label>
+            <input class="form__input" type="number" id="number_entities" name="number_entities" required min="1" max="10000">
         </p>
-        <input type="submit" value="Создать" class="form-entity__submit">
+        <input type="submit" value="Создать" class="form__submit">
     </form>
     <hr>
 
     <form action="" class="form form-text" method="POST">
-        <p class="form-text__item">
-            <label for="numbers_text_field_element_id">Элемент сущности (id)</label>
-            <input class="form-text__input" type="number" id="numbers_text_field_element_id" name="numbers_text_field_element_id">
+        <p class="form__item">
+            <label for="text_field_element_id">Элемент сущности (id)</label>
+            <input class="form__input" type="number" id="text_field_element_id" name="text_field_element_id" required>
         </p>
-        <p class="form-text__item">
-            <label for="numbers_text_field_ent_id">Сущность (id)</label>
-            <input class="form-text__input" type="number" id="numbers_text_field_ent_id" name="numbers_text_field_ent_id">
+        <p class="form__item">
+            <label for="text_field_ent_id">Сущность (id)</label>
+            <input class="form__input" type="number" id="text_field_ent_id" name="text_field_ent_id" required>
         </p>
-        <p class="form-text__item">
-            <label for="numbers_text_field_text">Текст</label>
-            <input class="form-text__input" type="text" id="numbers_text_field_text" name="numbers_text_field_text">
+        <p class="form__item">
+            <label for="text_field_text">Текст</label>
+            <input class="form__input" type="text" id="text_field_text" name="text_field_text" required>
         </p>
-        <input type="submit" value="Добавить" class="form-text__submit">
+        <input type="submit" value="Добавить" class="form__submit">
     </form>
     <hr>
 
     <form action="" class="form form-note" method="POST">
-        <p class="form-note__item">
-            <label for="add_note_field_element">Элемент сущности (id)</label>
-            <input class="form-note__input" type="number" id="add_note_field_element" name="add_note_field_element">
+        <p class="form__item">
+            <label for="note_element_id">Элемент сущности (id)</label>
+            <input class="form__input" type="number" id="note_element_id" name="note_element_id" required>
         </p>
-        <p class="form-note__item">
-            <label for="add_note_field_ent_id">Сущность (id)</label>
-            <input class="form-note__input" type="number" id="add_note_field_ent_id" name="add_note_field_ent_id">
+        <p class="form__item">
+            <label for="note_ent_id">Сущность (id)</label>
+            <input class="form__input" type="number" id="note_ent_id" name="note_ent_id" required>
         </p>
-        <p class="form-note__item">
-            <label for="add_note_field_list">Тип примечания</label>
-            <select class="form-note__select select" id="add_note_field_list" name="add_note_field_list">
+        <p class="form__item">
+            <label for="note_list">Тип примечания</label>
+            <select class="form__select select" id="note_list" name="note_list" required>
                 <option class="select__item" value="4">Обычное примечание</option>
                 <option class="select__item" value="10">Входящий звонок</option>
             </select>
         </p>
-        <p class="form-note__item">
-            <label for="add_note_field_text">Текст примечания</label>
-            <input class="form-note__input" type="text" id="add_note_field_text" name="add_note_field_text">
+        <p class="form__item">
+            <label for="note_text">Текст примечания</label>
+            <input class="form__input" type="text" id="note_text" name="note_text" required>
         </p>
-        <input type="submit" value="Добавить" class="form-note__submit">
+        <input type="submit" value="Добавить" class="form__submit">
     </form>
     <hr>
 
     <form action="" class="form form-task" method="POST">
-        <p class="form-task__item">
-            <label for="add_task_element">Элемент сущности (id)</label>
-            <input class="form-task__input" type="number" id="add_task_element" name="add_task_element">
+        <p class="form__item">
+            <label for="task_element_id">Элемент сущности (id)</label>
+            <input class="form__input" type="number" id="task_element_id" name="task_element_id" required>
         </p>
-        <p class="form-task__item">
-            <label for="add_task_ent_id">Сущность (id)</label>
-            <input class="form-task__input" type="number" id="add_task_ent_id" name="add_task_ent_id">
+        <p class="form__item">
+            <label for="task_ent_id">Сущность (id)</label>
+            <input class="form__input" type="number" id="task_ent_id" name="task_ent_id" required>
         </p>
-        <p class="form-task__item">
-            <label for="add_task_date">Дата завершения)</label>
-            <input class="form-task__input" type="datetime-local" id="add_task_date" name="add_task_date">
+        <p class="form__item">
+            <label for="task_date">Дата завершения</label>
+            <input class="form__input" type="datetime-local" id="task_date" name="task_date" required>
         </p>
-        <p class="form-task__item">
-            <label for="add_task_text">Текст задачи</label>
-            <input class="form-task__input" type="text" id="add_task_text" name="add_task_text">
+        <p class="form__item">
+            <label for="task_text">Текст задачи</label>
+            <input class="form__input" type="text" id="task_text" name="task_text" required>
         </p>
-        <p class="form-task__item">
-            <label for="add_task_responsible_id">ID ответственного</label>
-            <input class="form-task__input" type="number" id="add_task_responsible_id" name="add_task_responsible_id">
+        <p class="form__item">
+            <label for="task_responsible_id">ID ответственного</label>
+            <input class="form__input" type="number" id="task_responsible_id" name="task_responsible_id" value="24971143" required>
         </p>
-        <input type="submit" value="Добавить" class="form-task__submit">
+        <input type="submit" value="Добавить" class="form__submit">
     </form>
     <hr>
 
     <form action="" class="form form-task-end">
-        <p class="form-task-end__item">
-            <label for="add_task_end_id">ID задачи</label>
-            <input class="form-task-end__input" type="number" id="add_task_end_id" name="add_task_end_id">
+        <p class="form__item">
+            <label for="task_end_id">ID задачи</label>
+            <input class="form__input" type="number" id="task_end_id" name="task_end_id" required>
         </p>
-        <input type="submit" value="Завершить задачу">
+        <input type="submit" value="Завершить задачу" class="form__submit">
     </form>
-
-
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="js/main.js"></script>
