@@ -378,3 +378,9 @@ if(isset($_POST["add_task_element"]) && !empty($_POST["add_task_element"])) {
     $id_task = add_task($ent_id, $elem_id, $date_task, $text_task, $user_id);
     echo $id_task;
 }
+
+//обработка 5 пункта
+if(isset($_POST["add_task_end_id"]) && !empty($_POST["add_task_end_id"])) {
+    $end_task_id = $_POST["add_task_end_id"];
+    echo $end_task_id;
+}

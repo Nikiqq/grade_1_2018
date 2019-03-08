@@ -64,4 +64,21 @@ $(function(){
             }
         });
     })
+
+    $(".form-task-end").on("submit", function(event){
+        event.preventDefault();
+        let close_task_field = {};
+        $(".form-task-end__input").each(function(index, element) {
+            close_task_field[$(element).attr("name")] = element.value;
+        })
+
+        $.ajax({
+            type: "POST",
+            url: "scripts/add_entity.php",
+            data: close_task_field,
+            success: function(result){
+                console.log(result);
+            }
+        });
+    })
 })
