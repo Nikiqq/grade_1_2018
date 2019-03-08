@@ -76,15 +76,15 @@ require_once "scripts/autorization.php";
         </p>
         <p class="form-task__item">
             <label for="add_task_date">Дата завершения)</label>
-            <input class="form-task__input" type="date" id="add_task_date" name="add_task_date">
+            <input class="form-task__input" type="datetime-local" id="add_task_date" name="add_task_date">
         </p>
         <p class="form-task__item">
             <label for="add_task_text">Текст задачи</label>
             <input class="form-task__input" type="text" id="add_task_text" name="add_task_text">
         </p>
         <p class="form-task__item">
-            <label for="add_task_id">ID ответственного</label>
-            <input class="form-task__input" type="number" id="add_task_id" name="add_task_id">
+            <label for="add_task_responsible_id">ID ответственного</label>
+            <input class="form-task__input" type="number" id="add_task_responsible_id" name="add_task_responsible_id">
         </p>
         <input type="submit" value="Добавить" class="form-task__submit">
     </form>

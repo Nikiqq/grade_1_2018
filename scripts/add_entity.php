@@ -3,6 +3,28 @@
 require_once 'app_config.php';
 require_once 'autorization.php';
 
+function add_task($ent_id, $elem_id, $date_task, $text_task, $user_id) {
+    $data = array (
+        'add' =>
+            array (
+                0 =>
+                    array (
+                        'element_id' => $elem_id,
+                        'element_type' => $ent_id,
+                        'complete_till' => $date_task,
+                        'task_type' => '2',
+                        'text' => $text_task,
+                        'responsible_user_id' => $user_id,
+                    ),
+            ),
+    );
+    $link = "https://nkirillov.amocrm.ru/api/v2/tasks";
+
+    $out = get_post_query($link, $data);
+    $result = json_decode($out,TRUE);
+    return $result["_embedded"]["items"][0]["id"];
+}
+
 function update_element ($elem_id, $val, $field_id, $ent_name) {
     $data = array (
         'update' =>
@@ -347,5 +369,12 @@ if(isset($_POST["add_note_field_element"]) && !empty($_POST["add_note_field_elem
 
 //обработка 4 пункта
 if(isset($_POST["add_task_element"]) && !empty($_POST["add_task_element"])) {
-    echo "hello";
+    $ent_id = $_POST["add_task_ent_id"];
+    $elem_id = $_POST["add_task_element"];
+    $date_task = $_POST["add_task_date"];
+    $text_task = $_POST["add_task_text"];
+    $user_id = $_POST["add_task_responsible_id"];
+
+    $id_task = add_task($ent_id, $elem_id, $date_task, $text_task, $user_id);
+    echo $id_task;
 }

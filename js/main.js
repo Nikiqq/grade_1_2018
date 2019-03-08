@@ -60,7 +60,7 @@ $(function(){
             url: "scripts/add_entity.php",
             data: add_task_field,
             success: function(result){
-                console.log(result);
+                $('input[name="add_task_end_id"]').val(result);
             }
         });
     })
